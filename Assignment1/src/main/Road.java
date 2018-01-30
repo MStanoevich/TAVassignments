@@ -1,5 +1,3 @@
-package main;
-
 import java.security.Principal;
 import java.util.Random;
 
