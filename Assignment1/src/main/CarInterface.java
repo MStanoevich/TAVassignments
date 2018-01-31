@@ -1,8 +1,8 @@
 public interface CarInterface {
 
-    void moveFroward();
+    void moveFroward() throws Exception;
     boolean leftLaneDetect();
-    int changeLane();
+    void changeLane() throws Exception;
     int[] whereIs();
 
 }

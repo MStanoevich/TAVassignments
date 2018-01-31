@@ -1,32 +1,34 @@
 public class Car implements CarInterface {
 
-    int[] position = new int[]{2, 0};
+    int[] position = new int[]{0, 0};
 
     @Override
-    public void moveFroward() {
-        if (position[1] < 20){
-            position[1] += 5;
+    public void moveFroward() throws Exception{
+        if (position[1] < 19){
+            position[1] += 1;
+        }else{
+            throw new CarException(404);
         }
     }
 
     @Override
     public boolean leftLaneDetect() {
-        return true;
+        //implement sensor code here, be default no car is on left
+        return false;
     }
 
     @Override
-    public int changeLane() {
+    public void changeLane() throws Exception{
         if (leftLaneDetect()){
             moveFroward();
-            return 403;
+            throw new CarException(403);
         }else{
             moveFroward();
-            if(position[0] == 2){
+            if(position[0] == 0){
                 position[0] = 1;
             }else if(position[0] == 1){
-                position[0] = 0;
+                position[0] = 2;
             }
-            return 200;
         }
     }
 
