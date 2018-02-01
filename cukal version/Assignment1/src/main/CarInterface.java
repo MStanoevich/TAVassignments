@@ -1,13 +1,14 @@
 package main;
+import errorStreetException.*;
 public interface CarInterface {
 
-    boolean moveFroward();
+    boolean moveFroward() throws StreetLengthException;
     
     boolean leftLaneDetect(UltrasoundSensor r1,UltrasoundSensor r2,UltrasoundSensor r3,Lidar l);
     
-    int changeLane();
+    int changeLane() throws StreetLengthException;
     
-    int[] whereIs();
+    Position whereIs() throws StreetLengthException;
     
 
 }

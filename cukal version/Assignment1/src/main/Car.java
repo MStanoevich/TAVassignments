@@ -1,38 +1,38 @@
 package main;
 
+import errorStreetException.StreetLengthException;
+
 public class Car implements CarInterface {
 
-	private int carLane = 1; // car starts in the left most lane 1 the right
-								// most lane is 3
-	private int positionX = 0; // MAX positionX == 100 this is the streetlength
-	// array used to store the carLane and positionX
-	private int[] pos = new int[2];
+	// pos object holds the information for the carlane and pos(distance)
+	Position pos = new Position();
+
 	// ultrasound sensors
 	private UltrasoundSensor r1 = new UltrasoundSensor();
 	private UltrasoundSensor r2 = new UltrasoundSensor();
 	private UltrasoundSensor r3 = new UltrasoundSensor();
-	
-	
-	//set the car lane
-	public void setCarLane(int carLane) {
-		this.carLane = carLane;
-	}
-	// set the  position
-	public void setPositionX(int positionX) {
-		this.positionX = positionX;
-	}
-
 	// lidar sensor
 	private Lidar l = new Lidar();
 
+	// set the car lane
+	public void setCarLane(int carLane) {
+		this.pos.setCarLane(carLane);
+	}
+
+	// set the position
+	public void setPositionX(int positionX) {
+		this.pos.setPosX(positionX);
+	}
+
 	@Override
-	public boolean moveFroward() {
-		if (this.positionX < 100) {
-			this.positionX += 5;
+	public boolean moveFroward() throws StreetLengthException {
+		if (this.pos.getPosX() < 100) {
+			//increments the pos of the car by 5 meters
+			this.pos.incrementPos();
 			return true;
 		} else {
-			System.out.println("Throw exception NO WHERE TO RUN");
-			return false;
+
+			throw new StreetLengthException();
 		}
 	}
 
@@ -69,7 +69,7 @@ public class Car implements CarInterface {
 					// increase count of negative readings meaning sensor
 					// detects object closer than 5m
 					negativeReadings++;
-				} else if(querry[j] == 1) {
+				} else if (querry[j] == 1) {
 					positiveReadings++;
 				}
 
@@ -108,22 +108,25 @@ public class Car implements CarInterface {
 	}
 
 	@Override
-	public int changeLane() {
-		if (this.carLane < 3) {
+	public int changeLane() throws StreetLengthException {
+		if (this.pos.getCarLane() < 3) {
 			moveFroward();
-			this.carLane++;
+			this.pos.incrementLane();
+			// some success code dont know why??
 			return 401;
 
 		} else {
 			moveFroward();
-			return 403;
+			throw new StreetLengthException();
 		}
 	}
 
 	@Override
-	public int[] whereIs() {
-		pos[0] = this.carLane;
-		pos[1] = this.positionX;
-		return pos;
+	public Position whereIs() throws StreetLengthException {
+		if (this.pos.getCarLane() > 3 || this.pos.getCarLane() < 0 || this.pos.getPosX() < 0
+				|| this.pos.getPosX() > 100) {
+			throw new StreetLengthException();
+		}
+		return this.pos;
 	}
 }

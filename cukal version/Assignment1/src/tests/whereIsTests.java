@@ -3,6 +3,8 @@ package tests;
 import static org.junit.Assert.*;
 
 import org.junit.*;
+
+import errorStreetException.StreetLengthException;
 import main.*;
 
 public class whereIsTests {
@@ -16,39 +18,64 @@ public class whereIsTests {
 
 	// TEST1 The starting lane should be 1
 	@Test
-	public void testNewCarLane() {
-		int[] pos = car.whereIs();
-		int lane = pos[0];
+	public void testNewCarLane() throws StreetLengthException {
+		Position pos = car.whereIs();
+		int lane = pos.getCarLane();
 		assertEquals("The initial lane where the car is expected to be is 1", 1, lane);
 	}
 
 	// TEST2 The starting pos should be 0
 	@Test
-	public void testNewCarPosition() {
-		int[] pos = car.whereIs();
-		int posX = pos[1];
+	public void testNewCarPosition() throws StreetLengthException {
+		Position pos = car.whereIs();
+		int posX = pos.getPosX();
 		assertEquals("The initial position where the car is expected to be is 0", 0, posX);
 	}
 
 	// TEST3 changing the lane
 	@Test
-	public void testChangeCarLane() {
+	public void testChangeCarLane() throws StreetLengthException {
 		car.setCarLane(2);
-		int[] pos = car.whereIs();
-		int lane = pos[0];
+		Position pos = car.whereIs();
+		int lane = pos.getCarLane();
 		assertEquals("The  lane where the car is expected to be is 2", 2, lane);
 	}
 
 	// TEST4 changing the position
 	@Test
-	public void testChangeCarPosition() {
+	public void testChangeCarPosition() throws StreetLengthException {
 		car.setPositionX(80);
-		int[] pos = car.whereIs();
-		int posX = pos[1];
+		Position pos = car.whereIs();
+		int posX = pos.getPosX();
 		assertEquals("The  position where the car is expected to be is 80", 80, posX);
 	}
 
-	// there should be test when we try to put the car on lane -1 and 4 it
-	// should generate an exception and also when we try to put the position more than 100 or less than 0 4 TEST MORE
+	// TEST5 changing the position to an illegal 101
+	@Test(expected = StreetLengthException.class)
+	public void testChangeCarPositionIllegal() throws StreetLengthException {
+		car.setPositionX(101);
+		car.whereIs();
+	}
+
+	// TEST6 changing the car lane to an illegal 4
+	@Test(expected = StreetLengthException.class)
+	public void testChangeCarLaneIllegal() throws StreetLengthException {
+		car.setCarLane(4);
+		car.whereIs();
+	}
+
+	// TEST7 changing the car lane to an illegal -1
+	@Test(expected = StreetLengthException.class)
+	public void testChangeCarLaneIllegalNeg() throws StreetLengthException {
+		car.setCarLane(-1);
+		car.whereIs();
+	}
+
+	// TEST8 changing the car position to an illegal -1
+	@Test(expected = StreetLengthException.class)
+	public void testChangeCarPosIllegalNeg() throws StreetLengthException {
+		car.setPositionX(-1);
+		car.whereIs();
+	}
 
 }
