@@ -27,7 +27,7 @@ public class whereIsTests {
 	public void testNewCarPosition() {
 		int[] pos = car.whereIs();
 		int posX = pos[1];
-		assertEquals("The initial lane where the car is expected to be is 1", 0, posX);
+		assertEquals("The initial position where the car is expected to be is 0", 0, posX);
 	}
 
 	// TEST3 changing the lane
@@ -36,7 +36,7 @@ public class whereIsTests {
 		car.setCarLane(2);
 		int[] pos = car.whereIs();
 		int lane = pos[0];
-		assertEquals("The initial lane where the car is expected to be is 1", 2, lane);
+		assertEquals("The  lane where the car is expected to be is 2", 2, lane);
 	}
 
 	// TEST4 changing the position
@@ -45,7 +45,7 @@ public class whereIsTests {
 		car.setPositionX(80);
 		int[] pos = car.whereIs();
 		int posX = pos[1];
-		assertEquals("The initial lane where the car is expected to be is 1", 80, posX);
+		assertEquals("The  position where the car is expected to be is 80", 80, posX);
 	}
 
 	// there should be test when we try to put the car on lane -1 and 4 it
