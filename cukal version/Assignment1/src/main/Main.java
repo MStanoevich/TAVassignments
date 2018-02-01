@@ -5,6 +5,7 @@ public class Main {
 	public static void main(String[] args) {
 		Car car = new Car();
 		
+		
 		 UltrasoundSensor r1 = new UltrasoundSensor();
 		 UltrasoundSensor r2 = new UltrasoundSensor();
 		 UltrasoundSensor r3 = new UltrasoundSensor();
@@ -15,8 +16,10 @@ public class Main {
 		 r3.setSensorValue(-1);
 		 l.setLidarValue(1);
 		 
+		 
 		 boolean res = car.leftLaneDetect(r1, r2, r3, l);
 		 System.out.println(res);
+		 
 		 
 	}
 
