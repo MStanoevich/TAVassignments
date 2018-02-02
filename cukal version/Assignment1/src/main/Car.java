@@ -18,11 +18,10 @@ public class Car implements CarInterface {
 	}
 
 	@Override
-	public boolean moveFroward() throws StreetLengthException {
+	public void moveFroward() throws StreetLengthException {
 		if (this.pos.getPosX() < 100) {
 			// increments the pos of the car by 5 meters
 			this.pos.incrementPos();
-			return true;
 		} else {
 
 			throw new StreetLengthException("No road left for the car to move");
@@ -101,17 +100,16 @@ public class Car implements CarInterface {
 	}
 
 	@Override
-	public boolean changeLane(UltrasoundSensor r1, UltrasoundSensor r2, UltrasoundSensor r3, Lidar l1)
+	public void changeLane(UltrasoundSensor r1, UltrasoundSensor r2, UltrasoundSensor r3, Lidar l1)
 			throws StreetLengthException {
 		if (this.pos.getPosX() < 100) {
-			if (this.pos.getCarLane() < 3 && this.leftLaneDetect(r1, r2, r3, l1) == true) {
+			if (this.pos.getCarLane() < 3 && this.leftLaneDetect(r1, r2, r3, l1)) {
 				moveFroward();
 				this.pos.incrementLane();
 			} else {
 				moveFroward();
 			}
 			// lane succ changed
-			return true;
 
 		} else {
 			throw new StreetLengthException("No road left for the car to move");
