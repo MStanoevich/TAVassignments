@@ -7,13 +7,6 @@ public class Car implements CarInterface {
 	// pos object holds the information for the carlane and pos(distance)
 	Position pos = new Position();
 
-	// ultrasound sensors
-	private UltrasoundSensor r1 = new UltrasoundSensor();
-	private UltrasoundSensor r2 = new UltrasoundSensor();
-	private UltrasoundSensor r3 = new UltrasoundSensor();
-	// lidar sensor
-	private Lidar l = new Lidar();
-
 	// set the car lane
 	public void setCarLane(int carLane) {
 		this.pos.setCarLane(carLane);
@@ -27,19 +20,19 @@ public class Car implements CarInterface {
 	@Override
 	public boolean moveFroward() throws StreetLengthException {
 		if (this.pos.getPosX() < 100) {
-			//increments the pos of the car by 5 meters
+			// increments the pos of the car by 5 meters
 			this.pos.incrementPos();
 			return true;
 		} else {
 
-			throw new StreetLengthException();
+			throw new StreetLengthException("No road left for the car to move");
 		}
 	}
 
 	@Override
 	public boolean leftLaneDetect(UltrasoundSensor r1, UltrasoundSensor r2, UltrasoundSensor r3, Lidar l) {
 		boolean[] readingsRes = new boolean[2];
-		int[] querry = new int[4];
+		int[] querie = new int[4];
 		// counters for sensor values
 		int failedSensors = 0, positiveReadings = 0, negativeReadings = 0;
 		// setting the names for traceability of their values
@@ -56,20 +49,20 @@ public class Car implements CarInterface {
 			// querry[3] = l.generateRandomVal();
 
 			// get the fixed values
-			querry[0] = r1.getSensorValue();
-			querry[1] = r2.getSensorValue();
-			querry[2] = r3.getSensorValue();
-			querry[3] = l.getLidarValue();
+			querie[0] = r1.getSensorValue(i);
+			querie[1] = r2.getSensorValue(i);
+			querie[2] = r3.getSensorValue(i);
+			querie[3] = l.getLidarValue(i);
 
 			for (int j = 0; j < 4; j++) {
-				if (querry[j] == -1) {
+				if (querie[j] == -1) {
 					// increase count of failed sensors
 					failedSensors++;
-				} else if (querry[j] == 0) {
+				} else if (querie[j] == 0) {
 					// increase count of negative readings meaning sensor
 					// detects object closer than 5m
 					negativeReadings++;
-				} else if (querry[j] == 1) {
+				} else if (querie[j] == 1) {
 					positiveReadings++;
 				}
 
@@ -108,16 +101,20 @@ public class Car implements CarInterface {
 	}
 
 	@Override
-	public int changeLane() throws StreetLengthException {
-		if (this.pos.getCarLane() < 3) {
-			moveFroward();
-			this.pos.incrementLane();
-			// some success code dont know why??
-			return 401;
+	public boolean changeLane(UltrasoundSensor r1, UltrasoundSensor r2, UltrasoundSensor r3, Lidar l1)
+			throws StreetLengthException {
+		if (this.pos.getPosX() < 100) {
+			if (this.pos.getCarLane() < 3 && this.leftLaneDetect(r1, r2, r3, l1) == true) {
+				moveFroward();
+				this.pos.incrementLane();
+			} else {
+				moveFroward();
+			}
+			// lane succ changed
+			return true;
 
 		} else {
-			moveFroward();
-			throw new StreetLengthException();
+			throw new StreetLengthException("No road left for the car to move");
 		}
 	}
 
@@ -125,7 +122,7 @@ public class Car implements CarInterface {
 	public Position whereIs() throws StreetLengthException {
 		if (this.pos.getCarLane() > 3 || this.pos.getCarLane() < 0 || this.pos.getPosX() < 0
 				|| this.pos.getPosX() > 100) {
-			throw new StreetLengthException();
+			throw new StreetLengthException("No road left for the car to move");
 		}
 		return this.pos;
 	}
