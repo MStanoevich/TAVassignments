@@ -24,7 +24,7 @@ public class changeLaneTests {
 		r2 = new UltrasoundSensor();
 		r3 = new UltrasoundSensor();
 		l1 = new Lidar();
-		// set sensors to inRange values
+		// set sensors to inRange values for both querries
 		r1.setBothValues(1, 1);
 		r2.setBothValues(1, 1);
 		r3.setBothValues(1, 1);
@@ -61,7 +61,8 @@ public class changeLaneTests {
 		assertEquals("The lane where the car is expected to be is 2", 5, positionX);
 	}
 
-	// TEST4 When the current position is 100 and change lane is called an
+	// TEST4 When the current position is 100 and change lane is called when
+	// there is no car in the left lane an
 	// exception should be generated because there is no street to move
 	@Test(expected = StreetLengthException.class)
 	public void testOutOfStreetChangeLane() throws StreetLengthException {
@@ -95,6 +96,19 @@ public class changeLaneTests {
 		car.changeLane(r1, r2, r3, l1);
 		int currentPos = car.whereIs().getPosX();
 		assertEquals("The lane where the car is expected to be is 5", 5, currentPos);
+	}
+
+	// TEST7 When change lane is called and there is a car in the left lane the
+	// car should not change the lane but it should move forward if there is
+	// road left which in this case there isnt
+	@Test(expected = StreetLengthException.class)
+	public void testChangeLangeWithCarInLaneStreetExCheck() throws StreetLengthException {
+		car.setPositionX(100);
+		r1.setBothValues(0, 0);
+		r2.setBothValues(0, 0);
+		r3.setBothValues(0, 0);
+		l1.setBothValues(0, 0);
+		car.changeLane(r1, r2, r3, l1);
 	}
 
 }

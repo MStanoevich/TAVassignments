@@ -71,7 +71,14 @@ public class whereIsTests {
 		car.whereIs();
 	}
 
-	// TEST8 changing the car position to an illegal -1
+	// TEST8 changing the car lane to an illegal 0
+	@Test(expected = StreetLengthException.class)
+	public void testChangeCarLaneIllegal0() throws StreetLengthException {
+		car.setCarLane(0);
+		car.whereIs();
+	}
+
+	// TEST9 changing the car position to an illegal -1
 	@Test(expected = StreetLengthException.class)
 	public void testChangeCarPosIllegalNeg() throws StreetLengthException {
 		car.setPositionX(-1);

@@ -18,12 +18,12 @@ public class Car implements CarInterface {
 	}
 
 	@Override
-	public void moveFroward() throws StreetLengthException {
+	public void moveForward() throws StreetLengthException {
 		if (this.pos.getPosX() < 100) {
 			// increments the pos of the car by 5 meters
 			this.pos.incrementPos();
 		} else {
-
+			// generating an exception when there is no more street left
 			throw new StreetLengthException("No road left for the car to move");
 		}
 	}
@@ -40,7 +40,8 @@ public class Car implements CarInterface {
 		r3.setName("r3");
 		// Checking the sensors twice for new readings
 		for (int i = 0; i < 2; i++) {
-			// do you wannt to generate random val or
+			// Code used to generate random values (hard to test this way
+			// though)
 
 			// querry[0] = r1.generateRandomVal();
 			// querry[1] = r2.generateRandomVal();
@@ -52,7 +53,8 @@ public class Car implements CarInterface {
 			querie[1] = r2.getSensorValue(i);
 			querie[2] = r3.getSensorValue(i);
 			querie[3] = l.getLidarValue(i);
-
+			// going through the sensor values and counting them so the
+			// algoritham can check for an object present
 			for (int j = 0; j < 4; j++) {
 				if (querie[j] == -1) {
 					// increase count of failed sensors
@@ -66,6 +68,8 @@ public class Car implements CarInterface {
 				}
 
 			}
+			// following the requerments from the assignment to generate true or
+			// false result for the presence of an object in the next lane
 			if (failedSensors > 2) {
 				// more than 2 sensors not working properly..cant change lane
 				readingsRes[i] = false;
@@ -77,7 +81,7 @@ public class Car implements CarInterface {
 				// less or 2 failed sensors and no negative readings left lane
 				// is empty
 			} else {
-				// do not KNOW
+				// everything else should return false
 				readingsRes[i] = false;
 			}
 			System.out.println("Failed sens = " + failedSensors + " Positive = " + positiveReadings + " Negative = "
@@ -102,12 +106,21 @@ public class Car implements CarInterface {
 	@Override
 	public void changeLane(UltrasoundSensor r1, UltrasoundSensor r2, UltrasoundSensor r3, Lidar l1)
 			throws StreetLengthException {
+		// we have to check the position of the car on the street if it is 100
+		// than there is no more road left to rive
 		if (this.pos.getPosX() < 100) {
+			// after checking if there is enough road we have to check if we are
+			// or lane 1 or 2 since when on lane 3 we cannot change the lane to
+			// the left and we also check the leftLaneDetectAlgoritham for a
+			// result
 			if (this.pos.getCarLane() < 3 && this.leftLaneDetect(r1, r2, r3, l1)) {
-				moveFroward();
+				// first move forward
+				moveForward();
+				// than change the lane
 				this.pos.incrementLane();
 			} else {
-				moveFroward();
+				// we are in 3rd lane so we only move forward
+				moveForward();
 			}
 			// lane succ changed
 
@@ -118,10 +131,15 @@ public class Car implements CarInterface {
 
 	@Override
 	public Position whereIs() throws StreetLengthException {
-		if (this.pos.getCarLane() > 3 || this.pos.getCarLane() < 0 || this.pos.getPosX() < 0
+		//The car can not be placed on lane bigger than 4 or lane smaller than 1
+		//The car position can not be smaller than 0 and bigger than 100 generate exception for this cases
+		if (this.pos.getCarLane() > 3 || this.pos.getCarLane() < 1 || this.pos.getPosX() < 0
 				|| this.pos.getPosX() > 100) {
+			//Generating a new exception
 			throw new StreetLengthException("No road left for the car to move");
+		} else {
+			return this.pos;
 		}
-		return this.pos;
 	}
+
 }
