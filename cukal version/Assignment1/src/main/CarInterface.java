@@ -2,7 +2,7 @@ package main;
 import errorStreetException.*;
 
 /*
- * Interface created our Car
+ * Interface created for our Car
  */
 public interface CarInterface {
 	/*
