@@ -19,7 +19,7 @@ public class Car implements CarInterface {
 
 	@Override
 	public void moveForward() throws StreetLengthException {
-		if (this.pos.getPosX() < 100) {
+		if (this.pos.getPosX() < 100 && this.pos.getPosX() >= 0) {
 			// increments the pos of the car by 5 meters
 			this.pos.incrementPos();
 		} else {

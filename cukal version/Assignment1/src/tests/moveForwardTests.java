@@ -32,14 +32,20 @@ public class moveForwardTests {
 		car.moveForward();
 	}
 
-	// TEST3 The car cannot be moved forward beyond the end of the street so the
-	// position after calling the method should stay 100 and not 105
+	// TEST3 The car cannot be moved when it is out of the street
 	@Test(expected = StreetLengthException.class)
 	public void testMoveForwardFrom100Pos() throws StreetLengthException {
-		car.setPositionX(100);
+		car.setPositionX(-10);
 		car.moveForward();
-		int positionX = car.whereIs().getPosX();
-		assertEquals("The position  where the car is expected to be is 100", 100, positionX);
 	}
 
+	// TEST4 Moving forward from position 95
+	@Test
+	public void testMoveForwardFrom95() throws StreetLengthException {
+		car.setPositionX(95);
+		car.moveForward();
+		Position pos = car.whereIs();
+		int positionX = pos.getPosX();
+		assertEquals("The position  where the car is expected to be is 100", 100, positionX);
+	}
 }
